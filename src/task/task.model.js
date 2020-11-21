@@ -1,8 +1,4 @@
 import { Schema, model } from 'mongoose';
-import appConf from '../utils/app.conf';
-
-const conf = appConf.getConf();
-
 class Task extends Schema {
   constructor() {
     super(
