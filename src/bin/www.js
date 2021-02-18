@@ -1,4 +1,4 @@
-import { app, appServer } from '../index';
+import { app, appServer } from '../server';
 import logger from '../utils/logger';
 import appConf from '../utils/app.conf';
 
