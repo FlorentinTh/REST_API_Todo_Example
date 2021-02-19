@@ -12,11 +12,11 @@ import winston from './utils/logger';
 import appConf from './utils/app.conf';
 import apiError from './utils/api.error';
 
+import DocumentationBuilder from '../doc/documentation.builder';
+
 import mongo from './db/mongo';
 
 import tasksRoutes from './task/task.routes';
-
-import swaggerDocumentV1 from '../doc/v1.json';
 
 const conf = appConf.getConf();
 const isDev = conf.env === 'development';
@@ -34,9 +34,13 @@ app.use(compression());
 app.use(helmet());
 app.use(cors());
 
-mongo.start();
+(async () => {
+  await mongo.start();
+})();
 
-APIv1.use('/v1/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocumentV1));
+const documentationBuilder = new DocumentationBuilder('v1');
+const documentationFile = documentationBuilder.build();
+APIv1.use('/v1/doc', swaggerUI.serve, swaggerUI.setup(documentationFile));
 
 APIv1.use('/v1/tasks', tasksRoutes);
 app.use('/api', APIv1);

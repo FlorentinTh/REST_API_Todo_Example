@@ -34,7 +34,8 @@
         "ignoreUrls": true,
         "ignoreStrings": false,
         "ignoreTemplateLiterals": true,
-        "ignoreRegExpLiterals": true
+        "ignoreRegExpLiterals": true,
+        "space-before-function-paren": "es6"
       }
     ]
   },
