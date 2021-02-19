@@ -69,7 +69,9 @@ class TaskController {
     }
 
     res.status(httpStatus.OK).json({
-      data: task,
+      data: {
+        task: task
+      },
       message: 'Task successfully created'
     });
   }

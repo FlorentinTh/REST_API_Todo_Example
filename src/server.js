@@ -6,6 +6,7 @@ import httpStatus from 'http-status';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from 'compression';
+import swaggerUI from 'swagger-ui-express';
 
 import winston from './utils/logger';
 import appConf from './utils/app.conf';
@@ -14,6 +15,8 @@ import apiError from './utils/api.error';
 import mongo from './db/mongo';
 
 import tasksRoutes from './task/task.routes';
+
+import swaggerDocumentV1 from '../doc/v1.json';
 
 const conf = appConf.getConf();
 const isDev = conf.env === 'development';
@@ -32,6 +35,8 @@ app.use(helmet());
 app.use(cors());
 
 mongo.start();
+
+APIv1.use('/v1/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocumentV1));
 
 APIv1.use('/v1/tasks', tasksRoutes);
 app.use('/api', APIv1);

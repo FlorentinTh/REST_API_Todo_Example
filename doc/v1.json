@@ -1,0 +1,404 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "TODO API Example",
+    "version": "1.0.0",
+    "description": "This is a simple CRUD API application example made with Express and documented with Swagger",
+    "license": {
+      "name": "ISC",
+      "url": "https://opensource.org/licenses/ISC"
+    },
+    "contact": {
+      "name": "Florentin Thullier",
+      "url": "https://github.com/florentinTh"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}/api/{version}",
+      "variables": {
+        "port": {
+          "enum": [
+            "3000"
+          ],
+          "default": "3000"
+        },
+        "version": {
+          "enum": [
+            "v1"
+          ],
+          "default": "v1"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+    "name": "Tasks",
+    "description": "Possible operations to perform on tasks"
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Get all tasks",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "$ref": "#/definitions/Total"
+                        },
+                        "tasks": {
+                          "$ref": "#/definitions/Tasks"
+                        }
+                      }
+                    },
+                    "message": {
+                      "$ref": "#/definitions/Message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Create a new task",
+        "requestBody": {
+          "description": "Create a new task",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type":"string"
+                  }
+                },
+                "example" : {
+                  "name": "a new task"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "task": {
+                          "$ref": "#/definitions/Task"
+                        }
+                      }
+                    },
+                    "message": {
+                      "$ref": "#/definitions/Message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity. There is at least one error in provided data."
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Task ID",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Get a given task",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "task": {
+                          "$ref": "#/definitions/Task"
+                        }
+                      }
+                    },
+                    "message": {
+                      "$ref": "#/definitions/Message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Update a given task",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing task",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "state"
+                ],
+                "properties": {
+                  "name": {
+                    "type":"string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": ["pending", "ongoing", "completed"]
+                  }
+                },
+                "example" : {
+                  "name": "a new task name",
+                  "state": "ongoing"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "task": {
+                          "$ref": "#/definitions/Task"
+                        }
+                      }
+                    },
+                    "message": {
+                      "$ref": "#/definitions/Message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity. There is at least one error in provided data."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Delete a given task",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/Delete"
+                    },
+                    "message": {
+                      "$ref": "#/definitions/Message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Task": {
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "dateCreated": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["pending", "ongoing", "completed"]
+        }
+      },
+      "example": {
+        "_id": "602eab86e42ed94490c1e192",
+        "name": "Example task",
+        "dateCreated": "2021-02-18T18:01:42.680Z",
+        "state": "pending"
+      }
+    },
+    "Tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Task"
+      }
+    },
+    "Message": {
+      "type": "string",
+      "example": "success message"
+    },
+    "Total": {
+      "type": "integer",
+      "format": "int32",
+      "example": 1
+    },
+    "Delete": {
+      "type": "object",
+      "properties": {
+        "n": {
+          "type": "integer",
+          "format":"int32"
+        },
+        "ok": {
+          "type": "integer",
+          "format":"int32"
+        },
+        "deleteCount": {
+          "type": "integer",
+          "format":"int32"
+        }
+      },
+      "example": {
+        "n": 1,
+        "ok": 1,
+        "deleteCount": 1
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth" : {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter JWT Bearer Token"
+      }
+    }
+  }
+}
