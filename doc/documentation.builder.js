@@ -13,7 +13,7 @@ class DocumentationBuilder {
     try {
       this.commonFileContent = this.init();
     } catch (error) {
-      console.error(error);
+      throw new Error(error);
     }
   }
 

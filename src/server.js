@@ -10,7 +10,7 @@ import swaggerUI from 'swagger-ui-express';
 
 import winston from './utils/logger';
 import appConf from './utils/app.conf';
-import apiError from './utils/api.error';
+import ApiError from './utils/api.error';
 
 import DocumentationBuilder from '../doc/documentation.builder';
 
@@ -46,7 +46,7 @@ APIv1.use('/v1/tasks', tasksRoutes);
 app.use('/api', APIv1);
 
 app.use((req, res, next) => {
-  const err = new apiError('API not found', httpStatus.NOT_FOUND);
+  const err = new ApiError('API not found', httpStatus.NOT_FOUND);
   next(err);
 });
 

@@ -21,7 +21,11 @@
   "rules": {
     "no-console": "warn",
     "semi": ["error", "always"],
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": ["error", {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+    }],
     "new-cap": "warn",
     "max-len": [
       "warn",
@@ -34,8 +38,7 @@
         "ignoreUrls": true,
         "ignoreStrings": false,
         "ignoreTemplateLiterals": true,
-        "ignoreRegExpLiterals": true,
-        "space-before-function-paren": "es6"
+        "ignoreRegExpLiterals": true
       }
     ]
   },

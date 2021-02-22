@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import { validationResult } from 'express-validator';
 
 import Task from './task.model';
-import apiError from '../utils/api.error';
+import ApiError from '../utils/api.error';
 
 class TaskController {
   async getTasks(req, res, next) {
@@ -10,7 +10,7 @@ class TaskController {
       const tasks = await Task.find().exec();
 
       if (!tasks) {
-        return next(new apiError('Failed to get tasks', httpStatus.NOT_FOUND));
+        return next(new ApiError('Failed to get tasks', httpStatus.NOT_FOUND));
       }
 
       const data = {
@@ -23,7 +23,7 @@ class TaskController {
         message: 'success'
       });
     } catch (error) {
-      next(new apiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
+      next(new ApiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
     }
   }
 
@@ -34,7 +34,7 @@ class TaskController {
       const task = await Task.findOne({ _id: id }).exec();
 
       if (!task) {
-        return next(new apiError('Task not found', httpStatus.NOT_FOUND));
+        return next(new ApiError('Task not found', httpStatus.NOT_FOUND));
       }
 
       res.status(httpStatus.OK).json({
@@ -44,7 +44,7 @@ class TaskController {
         message: 'success'
       });
     } catch (error) {
-      next(new apiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
+      next(new ApiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
     }
   }
 
@@ -53,7 +53,7 @@ class TaskController {
 
     if (!bodyErrors.isEmpty()) {
       return next(
-        new apiError('Some form inputs are not valid', httpStatus.UNPROCESSABLE_ENTITY)
+        new ApiError('Some form inputs are not valid', httpStatus.UNPROCESSABLE_ENTITY)
       );
     }
 
@@ -64,7 +64,7 @@ class TaskController {
       await task.save();
     } catch (error) {
       return next(
-        new apiError('Failed to create new task', httpStatus.INTERNAL_SERVER_ERROR)
+        new ApiError('Failed to create new task', httpStatus.INTERNAL_SERVER_ERROR)
       );
     }
 
@@ -81,7 +81,7 @@ class TaskController {
 
     if (!bodyErrors.isEmpty()) {
       return next(
-        new apiError('Some form inputs are not valid', httpStatus.UNPROCESSABLE_ENTITY)
+        new ApiError('Some form inputs are not valid', httpStatus.UNPROCESSABLE_ENTITY)
       );
     }
 
@@ -99,7 +99,7 @@ class TaskController {
 
       if (!task) {
         return next(
-          new apiError('Task is not found and cannot be updated', httpStatus.NOT_FOUND)
+          new ApiError('Task is not found and cannot be updated', httpStatus.NOT_FOUND)
         );
       }
 
@@ -110,7 +110,7 @@ class TaskController {
         message: `Task successfully updated`
       });
     } catch (error) {
-      return next(new apiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
+      return next(new ApiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
     }
   }
 
@@ -122,7 +122,7 @@ class TaskController {
 
       if (!task) {
         return next(
-          new apiError('Task is not found and cannot be deleted', httpStatus.NOT_FOUND)
+          new ApiError('Task is not found and cannot be deleted', httpStatus.NOT_FOUND)
         );
       }
 
@@ -131,7 +131,7 @@ class TaskController {
         message: 'Task successfully deleted'
       });
     } catch (error) {
-      return next(new apiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
+      return next(new ApiError(error.message, httpStatus.INTERNAL_SERVER_ERROR));
     }
   }
 }
